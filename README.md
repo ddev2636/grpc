@@ -5,15 +5,15 @@ Learn how to use gRPC in Node.js to build a robust communication system for micr
 ## Flaws in Traditional HTTP Request Approach
 
 Traditional HTTP request methods have several limitations:
-- *No Types*: Unclear data structure between different services.
-- *JSON Serialization*: Inefficient for performance.
-- *Library Dependency*: Need to understand specific libraries like axios or fetch.
-- *Not Language Agnostic*: Different libraries required for different languages (e.g., Java, Go, Rust).
+- **No Types**: Unclear data structure between different services.
+- **JSON Serialization**: Inefficient for performance.
+- **Library Dependency**: Need to understand specific libraries like `axios` or `fetch`.
+- **Not Language Agnostic**: Different libraries required for different languages (e.g., Java, Go, Rust).
 
 ## gRPC Overview
 
 gRPC offers a modern solution for inter-service communication:
-- *gRPC*: Open-source RPC framework by Google.
+- **gRPC**: Open-source RPC framework by Google.
   - Uses HTTP/2 for transport.
   - Uses Protocol Buffers for data serialization.
   - Supports multiple programming languages.
@@ -22,13 +22,13 @@ gRPC offers a modern solution for inter-service communication:
 
 Protocol Buffers provide an efficient way to serialize structured data where we define our service definitions and messages. This will be like a common interface between the client and server on what to expect from each other; the methods, types, and returns of what each operation would bear.
 
-- *Smaller and Faster*: Compared to JSON or XML.
-- *Language Neutral*: Can be used across different programming languages.
-- *Machine Readable*: Binary format for efficient data exchange.
-- *Provides Generators*: Compile to source code in multiple languages (e.g., Java, Python, C++).
-- *Supports Types and Validations*: Define field types and add validations.
-- *Less Boilerplate Code*: Source code generators reduce manual coding.
-- *Supports RPC Interfaces*: Define RPC service interface in a proto file.
+- **Smaller and Faster**: Compared to JSON or XML.
+- **Language Neutral**: Can be used across different programming languages.
+- **Machine Readable**: Binary format for efficient data exchange.
+- **Provides Generators**: Compile to source code in multiple languages (e.g., Java, Python, C++).
+- **Supports Types and Validations**: Define field types and add validations.
+- **Less Boilerplate Code**: Source code generators reduce manual coding.
+- **Supports RPC Interfaces**: Define RPC service interface in a proto file.
 
 ## How RPC Works
 
@@ -44,38 +44,38 @@ Understand the RPC workflow:
 ## Creating a Server and Client with gRPC
 
 Steps to create a server and client with gRPC:
-1. *Create the service definition and payload structure in the Protocol Buffer (.proto) file.*
-2. **Generate the gRPC code from the .proto file by compiling it using protoc.**
-3. *Implement the server in one of the supported languages.*
-4. *Create the client that invokes the service through the Stub.*
-5. *Run the server and client(s).*
+1. **Create the service definition and payload structure in the Protocol Buffer (.proto) file.**
+2. **Generate the gRPC code from the .proto file by compiling it using `protoc`.**
+3. **Implement the server in one of the supported languages.**
+4. **Create the client that invokes the service through the Stub.**
+5. **Run the server and client(s).**
 
 ## Advantages of gRPC
 
 Explore the benefits of using gRPC:
-- *High Performance and Safety*: Uses Protocol Buffers and HTTP/2.
-- *Duplex Streaming*: Supports simultaneous client and server streaming.
-- *First Class Load Balancing*: Built-in feature for backend traffic management.
-- *Selective Message Compression*: Turn off compression for non-compressible content.
-- *Heavily Optimized*: Continuous benchmarks to ensure performance.
-- *Connection Pooling*: Managed channels with states like connected or idle.
+- **High Performance and Safety**: Uses Protocol Buffers and HTTP/2.
+- **Duplex Streaming**: Supports simultaneous client and server streaming.
+- **First Class Load Balancing**: Built-in feature for backend traffic management.
+- **Selective Message Compression**: Turn off compression for non-compressible content.
+- **Heavily Optimized**: Continuous benchmarks to ensure performance.
+- **Connection Pooling**: Managed channels with states like connected or idle.
 
 ## gRPC   Communication Types
 
 Different types of communication supported by gRPC:
-- *Unary RPC*: Traditional request-response-style communication.
-- *Server Streaming RPC*: Server sends a stream of data to the client's request.
-- *Client Streaming RPC*: Client sends a stream of data to the server.
-- *Bidirectional Streaming RPC*: Stream messages to both sides with two independent streams.
+- **Unary RPC**: Traditional request-response-style communication.
+- **Server Streaming RPC**: Server sends a stream of data to the client's request.
+- **Client Streaming RPC**: Client sends a stream of data to the server.
+- **Bidirectional Streaming RPC**: Stream messages to both sides with two independent streams.
 
 
 # Let’s get on to the practical implementation of gRPC, let’s develop an student onboarding system using three Node.JS micro services for inter-microservice communication let’s make use of gRPC
 
 ## Microservices Overview
 
-1. *Main microservice (primary)*: Accepts a student onboarding request via a RESTful API endpoint, then communicates with two secondary microservices to process the onboarding. Also offers an endpoint to check the status of an onboarding request.
-2. *Degree selector microservice (secondary)*: Communicates with the main microservice to search for degree details.
-3. *Onboarding processor microservice (secondary)*: Accepts an onboarding request and provides the current onboarding status based on status change events.
+1. **Main microservice (primary)**: Accepts a student onboarding request via a RESTful API endpoint, then communicates with two secondary microservices to process the onboarding. Also offers an endpoint to check the status of an onboarding request.
+2. **Degree selector microservice (secondary)**: Communicates with the main microservice to search for degree details.
+3. **Onboarding processor microservice (secondary)**: Accepts an onboarding request and provides the current onboarding status based on status change events.
 
 ## High-Level Design
 
@@ -87,45 +87,45 @@ The high-level design was created using draw.io.
 
 1. Create a parent folder and three subfolders for our microservices via terminal:
 
-    sh
+    ```sh
     mkdir main degree process
-    
+    ```
 
 2. Create a new Node.js project in the parent folder:
 
-    sh
+    ```sh
     npm init
     # -- or --
     yarn init
-    
+    ```
 
-3. Install @grpc/grpc-js, @grpc/proto-loader, and express dependencies:
+3. Install `@grpc/grpc-js`, `@grpc/proto-loader`, and `express` dependencies:
 
-    sh
+    ```sh
     npm install @grpc/grpc-js @grpc/proto-loader express
     # -- or --
     yarn add @grpc/grpc-js @grpc/proto-loader express
-    
+    ```
 
-4. Install the concurrently package to run all microservices:
+4. Install the `concurrently` package to run all microservices:
 
-    sh
+    ```sh
     npm install concurrently -D
     # -- or --
     yarn add concurrently -D
-    
+    ```
 
 ### Step 2: Define Services with Protocol Buffers (Protobufs)
 
 1. Create a new directory to store the Protobuf files:
 
-    sh
+    ```sh
     mkdir protos
-    
+    ```
 
-2. Create a Protobuf file for the communication between the main microservice and the degree selector. Add the following content to the ./protos/degree.proto file:
+2. Create a Protobuf file for the communication between the main microservice and the degree selector. Add the following content to the `./protos/degree.proto` file:
 
-    proto
+    ```proto
     syntax = "proto3";
 
     service Degrees {
@@ -141,11 +141,11 @@ The high-level design was created using draw.io.
       string title = 2;
       string major = 3;
     }
-    
+    ```
 
-3. Add the following definition to the ./protos/processing.proto:
+3. Add the following definition to the `./protos/processing.proto`:
 
-    proto
+    ```proto
     syntax = "proto3";
 
     service Processing {
@@ -167,13 +167,13 @@ The high-level design was created using draw.io.
     message OnboardStatusUpdate {
       OnboardStatus status = 1;
     }
-    
+    ```
 
 ### Step 3: Create gRPC Servers
 
-1. Create the degree selector microservice. Add the following code to ./degree/main.js:
+1. Create the degree selector microservice. Add the following code to `./degree/main.js`:
 
-    javascript
+    ```javascript
     const path = require('path');
     const grpc = require('@grpc/grpc-js');
     const protoLoader = require('@grpc/proto-loader');
@@ -201,11 +201,11 @@ The high-level design was created using draw.io.
     server.bindAsync('0.0.0.0:50051', grpc.ServerCredentials.createInsecure(), () => {
         server.start();
     });
-    
+    ```
 
-2. Create the onboarding processor microservice. Add the following code to ./process/main.js:
+2. Create the onboarding processor microservice. Add the following code to `./process/main.js`:
 
-    javascript
+    ```javascript
     const path = require('path');
     const grpc = require('@grpc/grpc-js');
     const protoLoader = require('@grpc/proto-loader');
@@ -231,19 +231,19 @@ The high-level design was created using draw.io.
     server.bindAsync('0.0.0.0:50052', grpc.ServerCredentials.createInsecure(), () => {
         server.start();
     });
-    
+    ```
 
-3. Update your package.json with the following code:
+3. Update your `package.json` with the following code:
 
-    json
+    ```json
     "scripts": {
        "start-degree": "node ./degree/main.js",
        "start-processor": "node ./process/main.js",
        "start": "concurrently 'npm run start-degree' 'npm run start-processor'"
     }
-    
+    ```
 
-4. Use npm start or yarn start to start both microservices.
+4. Use `npm start` or `yarn start` to start both microservices.
 
 ### Step 4: Test gRPC Servers with Postman
 
@@ -251,15 +251,15 @@ The high-level design was created using draw.io.
 
 2. Start both secondary microservices using the start npm script. First, we can test the degree selector microservice.
 
-3. Open the Postman app, click *File, then click **New* (or, press Ctrl+N/Cmd+N), and create a new gRPC request for 0.0.0.0:50051.
+3. Open the Postman app, click **File**, then click **New** (or, press `Ctrl+N`/`Cmd+N`), and create a new gRPC request for `0.0.0.0:50051`.
 
 4. Send the degree identifier to receive a degree object. Use the same steps to test the onboarding processor microservice. It will stream multiple order status change objects via the gRPC server streaming feature.
 
 ### Step 5: Create gRPC Client that Communicates with Server
 
-1. Complete the demo student onboarding processing system by implementing a RESTful API for the main microservice. Create a new file in the following path ./main/main.js and add the below code:
+1. Complete the demo student onboarding processing system by implementing a RESTful API for the main microservice. Create a new file in the following path `./main/main.js` and add the below code:
 
-    javascript
+    ```javascript
     const path = require('path');
     const grpc = require('@grpc/grpc-js');
     const protoLoader = require('@grpc/proto-loader');
@@ -346,26 +346,26 @@ The high-level design was created using draw.io.
     app.listen(port, () => {
         console.log(`API is listening on port ${port}`);
     });
-    
+    ```
 
-2. Update the start script in package.json to run all microservices at once. Use the following script definitions:
+2. Update the `start` script in `package.json` to run all microservices at once. Use the following script definitions:
 
-    json
+    ```json
     "scripts": {
         "start-degree": "node ./degree/main.js",
         "start-processor": "node ./process/main.js",
         "start-main": "node ./main/main.js",
         "start": "concurrently 'npm run start-degree' 'npm run start-processor' 'npm run start-main'"
     }
-    
+    ```
 
-3. Run npm start or yarn start to start the demo student onboarding system.
+3. Run `npm start` or `yarn start` to start the demo student onboarding system.
 
 ### Step 6: Test the RESTful API with Postman
 
-1. First, create several orders with POST /studentOnboard:
+1. First, create several orders with `POST /studentOnboard`:
 
-    json
+    ```json
     {
         "degreeId": 1000,
         "name": "John Doe",
@@ -373,9 +373,9 @@ The high-level design was created using draw.io.
         "education": "Bachelor's in Science",
         "father": "Robert Doe"
     }
-    
+    ```
 
-2. Next, check onboarding status with GET /onboardingStatus/{orderId}.
+2. Next, check onboarding status with `GET /onboardingStatus/{orderId}`.
 
 ---
 
